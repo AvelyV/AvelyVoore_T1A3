@@ -1,3 +1,1 @@
-#!/bin/bash
-
-artii 'Budgety'
+puts "hello"
