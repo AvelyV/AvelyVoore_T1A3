@@ -1,6 +1,7 @@
 # module holding all the methods that take user input
 module Input
   require 'tty-prompt'
+  require_relative '../classes/budget_period'
 
   # adding new expence to a period
   def new_expense

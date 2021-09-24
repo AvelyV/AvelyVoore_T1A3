@@ -1,8 +1,10 @@
-require 'csv'
+
 
 class BudgetPeriod
   attr_reader :bedget_p
+  require 'csv'
 
+  @@cat_array = ['Home', 'Food', 'Transport', 'Bills', 'Entertainment', 'Splurge', 'Other']
   @@total_periods = 0
   @@budget_p = []
   
@@ -18,8 +20,13 @@ class BudgetPeriod
     end
   end
 
+  # getter for @@budget_p
   def self.budget_p
-    puts @@budget_p
+    @@budget_p
+  end
+
+  def self.cat_array
+    @@cat_array
   end
 
   def to_s
