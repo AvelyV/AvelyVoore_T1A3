@@ -14,3 +14,4 @@ entry = prompt.collect do
     # insert an array with all the categories
     end
   end
+end
