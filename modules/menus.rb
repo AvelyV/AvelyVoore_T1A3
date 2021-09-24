@@ -7,19 +7,25 @@ module Menus
 
   # prints main menu
   def main_menu
-    main_menu = TTY::Prompt.new
+    quit = false
 
-    input = main_menu.select("What would you like to do?",
-                             ["New Entry", "Budget Period Overview", "Delete an Entry"])
+    while quit == false
+      main_menu = TTY::Prompt.new
 
-    case input
-    when "New Entry"
-      # takes user to new expence menu
-      new_exp_menu
-    when "Budget Period Overview"
-      puts "This is overview"
-    when "Delete an Entry"
-      puts "This is where you delete and entry"
+      input = main_menu.select("What would you like to do?",
+                              ["New Entry", "Budget Period Overview", "Delete an Entry", "Exit"])
+
+      case input
+      when "New Entry"
+        # takes user to new expence menu
+        new_exp_menu
+      when "Budget Period Overview"
+        puts "This is overview"
+      when "Delete an Entry"
+        puts "This is where you delete and entry"
+      when "Exit"
+        quit = true
+      end
     end
   end
 
@@ -32,7 +38,7 @@ module Menus
     when "Existing Budget Period"
       k = TTY::Prompt.new
 
-      p = k.select("Choose a period you would like to add to", BudgetPeriod.budget_p)
+      p = k.select("Choose a period you would like to add to", BudgetPeriod.budget_p.name)
     when "Create New Budget Period"
       Input.new_period
     end

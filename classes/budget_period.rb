@@ -11,9 +11,9 @@ class BudgetPeriod
     @limit = Integer(limit)
     @@total_periods += 1
     @@budget_p << self
-    @file = "./../files/#{@name}.csv"
-
-    CSV.open(@file, 'a') do |line|
+    @file = "./../files/#{@name.delete(' ')}.csv"
+    pp @@budget_p
+    CSV.open("#{@file}", 'a') do |line|
       line << ['date', 'price', 'category', 'comment']
     end
   end
