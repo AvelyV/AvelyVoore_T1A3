@@ -1,6 +1,8 @@
 require 'csv'
 
 class BudgetPeriod
+  attr_reader :bedget_p
+
   @@total_periods = 0
   @@budget_p = []
   
@@ -10,10 +12,14 @@ class BudgetPeriod
     @@total_periods += 1
     @@budget_p << self
     @file = "./../files/#{@name}.csv"
-    # how can i make a csv file with the period name ???
+
     CSV.open(@file, 'a') do |line|
       line << ['date', 'price', 'category', 'comment']
     end
+  end
+
+  def self.budget_p
+    puts @@budget_p
   end
 
   def to_s
@@ -23,8 +29,8 @@ class BudgetPeriod
 end
 
 
-sept = BudgetPeriod.new('Sept', 1500)
+# sept = BudgetPeriod.new('Sept', 1500)
 
-puts aug
-puts oct
+# puts aug
+# puts oct
 
