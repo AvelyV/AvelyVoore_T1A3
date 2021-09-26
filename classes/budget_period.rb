@@ -1,23 +1,36 @@
 
-
 class BudgetPeriod
-  attr_reader :bedget_p
+  attr_accessor :file, :budget_periods, :name, :limit
+
   require 'csv'
+  require 'rainbow'
+
 
   @@cat_array = ['Home', 'Food', 'Transport', 'Bills', 'Entertainment', 'Splurge', 'Other']
-  @@total_periods = 0
+  # FIXME: first entered period does not end up in a hash
   @@budget_p = []
+  @@budget_periods = {}
   
   def initialize(name, limit)
     @name = name
     @limit = Integer(limit)
-    @@total_periods += 1
-    @@budget_p << self
-    @file = "./../files/#{@name.delete(' ')}.csv"
-    pp @@budget_p
+    # FIXME: path to files dir not working
+    @file = "#{@name.delete(' ')}.csv"
+    # array holding budget period names, i don't think i need it
+    # @@budget_p << self
+    # # FIXME: how to get it to show names instead of object id
+    # puts @@budget_p
+    # hash holding budget periods
     CSV.open("#{@file}", 'a') do |line|
       line << ['date', 'price', 'category', 'comment']
     end
+    puts Rainbow("New budget period created").lightblue
+  end
+
+
+  
+  def self.budget_periods
+    @@budget_periods
   end
 
   # getter for @@budget_p
@@ -29,15 +42,10 @@ class BudgetPeriod
     @@cat_array
   end
 
-  def to_s
-    puts "Budget period #{@name} has a limit of $#{@limit} "
+  def to_str
+    # FIXME: still prints object id
+    # I DON'T THINK I NEED THIS
+    puts "#{@name} with limit of #{@limit}"
   end
 
 end
-
-
-# sept = BudgetPeriod.new('Sept', 1500)
-
-# puts aug
-# puts oct
-

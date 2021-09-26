@@ -8,7 +8,7 @@ def remove_cat(cat_array)
   j = d.select('Which category would you like to delete?', cat_array)
 
   cat_array.delete(j)
-  puts Rainbow("Available categories are: #{cat_array}").lavender
+  puts Rainbow("Available categories are: #{cat_array}").whitesmoke
 end
 
 # add items to catArray
@@ -18,5 +18,5 @@ def add_cat(cat_array)
     q.modify :strip, :capitalize
   end
   cat_array << w
-  puts Rainbow("Available categories are: #{cat_array}").lavender
+  puts Rainbow("Available categories are: #{cat_array}").whitesmoke
 end

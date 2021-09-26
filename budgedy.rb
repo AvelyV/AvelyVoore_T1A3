@@ -7,6 +7,7 @@ include Menus
 include Input
 
 
+### FIXME: How to use ARGV with shell script????
 # ARGV.each do |argv|
 #   if argv == '-e' || argv == '--expense'
 #     # go straight into choosing what period to add the expense to
