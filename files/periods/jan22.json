@@ -1,0 +1,12 @@
+{
+  "name": "jan22",
+  "limit": "1560",
+  "expenses": [
+    {
+      "date": "2022-01-01",
+      "price": 55.95,
+      "category": "Splurge",
+      "comment": "Books"
+    }
+  ]
+}

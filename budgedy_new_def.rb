@@ -2,8 +2,6 @@ require 'json'
 require 'tty-prompt'
 require 'rainbow'
 
-cat_array = ["Home", "Food", "Transport", "Entertainment", "Other"]
-
 # prints main menu
 def main_menu
     quit = false
@@ -12,7 +10,7 @@ def main_menu
       main_menu = TTY::Prompt.new
 
       input = main_menu.select("What would you like to do?",
-                               ["New Entry", "Budget Period Overview", "Modify Categories", "Delete an Entry", "Exit"])
+                               ["New Entry", "Budget Period Overview", "Modify Categories", "Delete an Entry", "Change Limits", "Exit"])
 
       case input
       when "New Entry"
@@ -33,6 +31,8 @@ def main_menu
         # what period, then what entry
         # FIXME: STILL TO DO
         remove_expense_menu
+      when "Change Limits"
+        change_limit(choose_file)
       when "Exit"
         quit = true
       end
@@ -59,9 +59,8 @@ def new_period
 
   # Storing instances in a hash
   period = {name: "#{name}", limit: "#{limit}", expenses: []}
-  json = JSON.generate(period)
+  JSON.generate(period)
 
-  # FIXME: should i remove 'space' from file name
   File.open("./files/periods/#{name.delete(' ')}.json", "w") do |f|
     f.write(period.to_json)
   end
@@ -112,7 +111,7 @@ end
 
     date = prompt.ask("Date: ") do |q|
       q.required true
-      q.convert(:date, "Error, enter date DD/MM/YYYY")
+      q.convert(:date, "Error, enter date YYYY/MM/DD")
     end
 
     price = prompt.ask("Price: $") do |q|
@@ -125,7 +124,7 @@ end
     comment = prompt.ask("Comment: ")
 
     json = JSON.parse(File.read("./files/periods/#{per}.json", symbolize_names: true))
-    p json
+
     json["expenses"] << {date: date, price: price, category: category, comment: comment}
     File.write("./files/periods/#{per}.json", JSON.pretty_generate(json))
 
@@ -203,8 +202,6 @@ def overview(choose_file)
   end
 
 
-  # FIXME:
-
   array = []
   expenses.each do |num|
     array << num['price'].to_f
@@ -221,7 +218,7 @@ def overview(choose_file)
     puts "Something is not right"
   end
 
-  # FIXME: finf a nicer way of printing expenses
+  # FIXME: find a nicer way of printing expenses
   expenses.each do |hash|
     puts "On #{hash['date']} you spent $#{hash['price']}, Category: #{hash['category']}, Comment: #{hash['comment']}"
     end
@@ -229,8 +226,19 @@ def overview(choose_file)
 end
 
 
-# FIXME:
+# FIXME: how will you delete an expense
 def del_expense
+
 end
 
+# DONE:
+def change_limit(choose_file)
+  prompt = TTY::Prompt.new
+  per = prompt.select("Choose a periods limit would you like to change?", choose_file)
+
+  json = JSON.parse!(File.read("./files/periods/#{per}.json"))
+  new_limit = prompt.ask("Enter new limit: $")
+  json['limit'] = new_limit
+  File.write("./files/periods/#{per}.json", JSON.pretty_generate(json))
+end
 main_menu
