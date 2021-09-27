@@ -7,7 +7,6 @@ class BudgetPeriod
 
 
   @@cat_array = ['Home', 'Food', 'Transport', 'Bills', 'Entertainment', 'Splurge', 'Other']
-  # FIXME: first entered period does not end up in a hash
   @@budget_p = []
   @@budget_periods = {}
   
@@ -21,8 +20,8 @@ class BudgetPeriod
     # # FIXME: how to get it to show names instead of object id
     # puts @@budget_p
     # hash holding budget periods
-    CSV.open("#{@file}", 'a') do |line|
-      line << ['date', 'price', 'category', 'comment']
+    CSV.open("#{@file}", 'w') do |line|
+      line << ['Date', 'Price', 'Category', 'Comment']
     end
     puts Rainbow("New budget period created").lightblue
   end

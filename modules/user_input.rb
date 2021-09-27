@@ -8,7 +8,7 @@ module Input
   def new_expense(per)
     puts "New expense details"
     prompt = TTY::Prompt.new
-    
+
     date = prompt.ask("Date: ") do |q|
       q.required true
       q.convert(:date, "Error, enter date DD/MM/YYYY")
@@ -36,7 +36,7 @@ module Input
     name = prompt.ask("Give the new budget period a unique name: ") do |q|
       q.required true
     end
-    name.delete(' ')
+    name.chomp
 
     limit = prompt.ask("What is the limit for \"#{name}\" period? $") do |q|
       q.required true
