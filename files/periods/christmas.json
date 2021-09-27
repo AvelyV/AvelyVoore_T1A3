@@ -1,0 +1,30 @@
+{
+  "limit": 123,
+  "name": "christmas",
+  "expenses": [
+    {
+      "date": "12.12.12",
+      "price": 12,
+      "category": "Home",
+      "comment": ""
+    },
+    {
+      "date": "12.12.12",
+      "price": 12,
+      "category": "Home",
+      "comment": ""
+    },
+    {
+      "date": "2015-12-21",
+      "price": 45.0,
+      "category": 123,
+      "comment": "gifts"
+    },
+    {
+      "date": "2023-12-21",
+      "price": 12.45,
+      "category": "Transport",
+      "comment": "buss"
+    }
+  ]
+}

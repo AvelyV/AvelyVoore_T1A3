@@ -36,14 +36,14 @@ module Input
     name = prompt.ask("Give the new budget period a unique name: ") do |q|
       q.required true
     end
-    name.chomp
+    name = name.strip
 
     limit = prompt.ask("What is the limit for \"#{name}\" period? $") do |q|
       q.required true
       # convert to float, print an error if entered value was not numeric
       q.convert(:float, "Error, enter numeric value")
     end
-    ###can i store my budget periods in a hash like this?
+    # Storing instances in a hash
     BudgetPeriod.budget_periods[name] = BudgetPeriod.new(name, limit)
 
     puts name

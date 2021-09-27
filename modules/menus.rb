@@ -27,7 +27,7 @@ module Menus
         # takes user to Budget overview menu
         begin
           choose_period
-        rescue
+        rescue StandardError
           puts Rainbow("There are no existing budget periods").salmon
         end
       when "Modify Categories"
@@ -49,18 +49,17 @@ module Menus
     include Input
     prompt = TTY::Prompt.new
     inputs = prompt.select("Where would you like to add the expence?",
-                      ["Existing Budget Period", "Create New Budget Period"])
+                           ["Existing Budget Period", "Create New Budget Period"])
     case inputs
     when "Existing Budget Period"
       begin
         # prints all the periods for user to choose from
         per = prompt.select("Choose a period you would like to add to", BudgetPeriod.budget_periods.keys)
         new_expense(per)
-        Menus.main_menu
-      rescue 
+        # Menus.main_menu
+      rescue StandardError
         # this works
         puts Rainbow("There are no existing budget periods...").salmon
-        Menus.main_menu
       end
     when "Create New Budget Period"
       Input.new_period
@@ -68,22 +67,19 @@ module Menus
   end
 
   def remove_expense_menu
-
-    begin
-      prompt = TTY::Prompt.new
-      # prints all the periods for user to choose from
-      del = prompt.select("Choose a period you would like to remove from", BudgetPeriod.budget_periods.keys)
-      del_expense(del)
-    rescue 
-      puts Rainbow("There are no existing budget periods").salmon
-      Menus.main_menu
-    end
+    prompt = TTY::Prompt.new
+    # prints all the periods for user to choose from
+    del = prompt.select("Choose a period you would like to remove from", BudgetPeriod.budget_periods.keys)
+    del_expense(del)
+  rescue StandardError
+    puts Rainbow("There are no existing budget periods").salmon
+    Menus.main_menu
   end
 
   def del_expense(del)
     prompt = TTY::Prompt.new
     # FIXME: shows some random shit
-    expense = CSV.foreach("#{BudgetPeriod.budget_periods[del].file}") do |row|
+    expense = CSV.foreach(BudgetPeriod.budget_periods[del].file.to_s) do |row|
       p row
     end
     line = prompt.select("Choose an expence to remove", expense)
@@ -98,11 +94,9 @@ module Menus
     when "Add a category"
       # adds category to array and takes you back to main menu
       add_cat(BudgetPeriod.cat_array)
-      Menus.main_menu
     when "Delete a category"
       # deletes category from array and takes you back to main menu
       remove_cat(BudgetPeriod.cat_array)
-      Menus.main_menu
     end
   end
 
@@ -116,22 +110,24 @@ module Menus
   def overview(period)
     system('clear')
     # prints out period introduction
-    puts Rainbow("\"#{BudgetPeriod.budget_periods[period].name}\" limit is $#{BudgetPeriod.budget_periods[period].limit}").lightblue
+    puts Rainbow("Period \"#{BudgetPeriod.budget_periods[period].name}\" limit is $#{BudgetPeriod.budget_periods[period].limit}").lightblue
 
-    # FIXME: how do i get to the price
- 
     # creates an array with all the prices in the instances csv file
     array = []
-    CSV.foreach("#{BudgetPeriod.budget_periods[period].file}", headers: true, header_converters: :symbol) do |row|
-      # FIXME: why does it not know what price is
-      # row[:price]
+
+    puts "-------------------------------"
+    puts BudgetPeriod.budget_periods
+    system "pwd"
+    system "csv2md #{BudgetPeriod.budget_periods[period].file}"
+    puts "-------------------------------"
+    CSV.foreach(BudgetPeriod.budget_periods[period].file.to_s, headers: true, header_converters: :symbol) do |row|
       array << row[:price].to_f
     end
     sum = array.inject(0, :+)
 
     puts Rainbow("Your total spendings are #{sum}").lightblue
     # FIXME: how do i make bash script find the right file???
-    # %x(``csv2md BudgetPeriod.budget_periods[period].file``)
+    # %x(`csv2md dets21.csv`)
 
     if sum <= BudgetPeriod.budget_periods[period].limit
       puts Rainbow("You are $#{BudgetPeriod.budget_periods[period].limit - sum} under the budget").lightgreen
@@ -141,12 +137,21 @@ module Menus
       puts "Something is not right"
     end
 
-    puts Rainbow("List of spendings in \"#{BudgetPeriod.budget_periods[period].name}\":").whitesmoke
+    #   count the lines in the csv file
+    line_count = 0
+    # FIXME: does not find the file
+    CSV.open(BudgetPeriod.budget_periods[period].to_s) do |_line|
+      line_count += 1
+    end
 
-    # prints out the list, want to use csv2md
-    CSV.foreach("#{BudgetPeriod.budget_periods[period].file}", headers: true) do |row|
-      p row
+    if line_count <= 1
+      puts "There are no expenses in the period"
+    else
+      puts Rainbow("List of spendings in \"#{BudgetPeriod.budget_periods[period].name}\":").whitesmoke
+      # prints out the list, want to use csv2md
+      CSV.foreach(BudgetPeriod.budget_periods[period].file.to_s, headers: true) do |row|
+        p row
+      end
     end
   end
-
 end
