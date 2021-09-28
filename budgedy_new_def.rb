@@ -26,11 +26,11 @@ def main_menu
         begin
           system('clear')
           overview(choose_file)
-          # rescue StandardError
-          #   puts Rainbow("There are no existing budget periods").salmon
+          rescue StandardError
+            puts Rainbow("There are no existing budget periods").salmon
         end
       when "Modify Categories" 
-        mod_cat
+        mod_cat(array)
       when "Delete an Entry"
         # takes user to deletion entry, fist
         # what period, then what entry
@@ -43,7 +43,6 @@ def main_menu
       end
     end
 end
-
 
 # DONE:
 def new_period
@@ -79,7 +78,7 @@ def new_period
 
 end
 
-# DONE: prints all the filenames w/out file extesions
+# DONE: prints all the  filenames w/out file extesions
 def choose_file
   period = []
   files =  Dir.children "./files/periods"
@@ -89,7 +88,6 @@ def choose_file
   end
   return period
 end
-
 
   # DONE:
   # adding new expence menu
@@ -115,10 +113,9 @@ def new_exp_menu(choose_file)
   end
 end
  
-
-  # DONE:
-  # adding new expence to a period
-  def new_expense(per, array)
+# DONE:
+# adding new expence to a period
+def new_expense(per, array)
     puts "Enter new expense details"
     prompt = TTY::Prompt.new
 
@@ -142,9 +139,7 @@ end
     File.write("./files/periods/#{per}.json", JSON.pretty_generate(json))
     puts Rainbow("New expense added").lightblue
 
-  end
-
-
+end
 
 # DONE:
 # parse categories array
@@ -152,9 +147,9 @@ def array
   json = JSON.parse(File.read('./files/Categories/cat.json'))
 end
 
-
-# DONE:
-def mod_cat
+# DONE: 
+# NOTE: why does it work without passing an array in
+def mod_cat(array)
   back = false
   while back == false
     prompt = TTY::Prompt.new
@@ -173,13 +168,12 @@ def mod_cat
   end
 end
 
-
 # DONE:
 # remove items from cat_array
 def remove_cat(array)
   puts Rainbow("Current categories: #{array.join(', ')}").whitesmoke
   prompt = TTY::Prompt.new
-  del = prompt.select('Which category would you like to delete?', array, cycle: true)
+  del = prompt.select('Which category would you like to delete?', array, per_page: 10, cycle: true)
 
   # modify array
   array.delete("#{del}")
@@ -188,8 +182,6 @@ def remove_cat(array)
 
   puts Rainbow("Available categories are: #{array.join(', ')}").whitesmoke
 end
-
-
 
 # DONE:
 # add items to cat_array
@@ -206,8 +198,6 @@ def add_cat(array)
   puts Rainbow("Available categories are: #{array.join(', ')}").whitesmoke
 end
 
-
-
 def overview(choose_file)
   system('clear')
   
@@ -215,7 +205,7 @@ def overview(choose_file)
   puts Rainbow("█░░█ ░█▄█░ █▀▀ █▄▄▀ ░█▄█░ ▀█▀ █▀▀ █▄█▄█ ").lightgreen
   puts Rainbow("▀▀▀▀ ░░▀░░ ▀▀▀ ▀░▀▀ ░░▀░░ ▀▀▀ ▀▀▀ ░▀░▀░ ").lightpink
   prompt = TTY::Prompt.new
-  inputs = prompt.select("What period would you like to see?", choose_file, cycle: true)
+  inputs = prompt.select("What period would you like to see?", choose_file, per_page: 10, cycle: true)
   # prints out period introduction
   json = JSON.parse!(File.read("./files/periods/#{inputs}.json"))
   puts Rainbow("Period \"#{json['name']}\" limit is $#{json['limit']}").lightblue
@@ -247,12 +237,10 @@ def overview(choose_file)
 
 end
 
-
 # FIXME: does it make sense with a variable???
 def parse_file(var)
   json = JSON.parse!(File.read("./files/periods/#{var}.json"))
 end
-
 
 # FIXME: how will you delete an expense
 # choose_file is an array of file names
@@ -276,9 +264,6 @@ def choose_expense(choose_file)
     # p index
 
 end
-
-
-
 
 # DONE:
 def change_limit(choose_file)
