@@ -1,0 +1,18 @@
+{
+  "name": "summer_holidays",
+  "limit": "1650",
+  "expenses": [
+    {
+      "date": "2021-09-28",
+      "price": 553.0,
+      "category": "Transport",
+      "comment": "plane tickets"
+    },
+    {
+      "date": "2021-12-01",
+      "price": 57.0,
+      "category": "Food",
+      "comment": "restaurant"
+    }
+  ]
+}

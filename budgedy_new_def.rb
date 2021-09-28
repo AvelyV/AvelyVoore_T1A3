@@ -177,6 +177,7 @@ end
 # DONE:
 # remove items from cat_array
 def remove_cat(array)
+  puts Rainbow("Current categories: #{array.join(', ')}").whitesmoke
   prompt = TTY::Prompt.new
   del = prompt.select('Which category would you like to delete?', array, cycle: true)
 
@@ -185,7 +186,7 @@ def remove_cat(array)
   # turn array into json
   File.write('./files/Categories/cat.json', JSON.pretty_generate(array))
 
-  puts Rainbow("Available categories are: #{array}").whitesmoke
+  puts Rainbow("Available categories are: #{array.join(', ')}").whitesmoke
 end
 
 
@@ -193,6 +194,7 @@ end
 # DONE:
 # add items to cat_array
 def add_cat(array)
+  puts Rainbow("Current categories: #{array.join(', ')}").whitesmoke
   prompt = TTY::Prompt.new
   add = prompt.ask('Which category would you like to add?') do |q|
     q.modify :strip, :capitalize
@@ -201,7 +203,7 @@ def add_cat(array)
     array << add
     # turn array into json
     File.write('./files/Categories/cat.json', JSON.pretty_generate(array))
-  puts Rainbow("Available categories are: #{array}").whitesmoke
+  puts Rainbow("Available categories are: #{array.join(', ')}").whitesmoke
 end
 
 
