@@ -1,30 +1,30 @@
 {
-  "limit": 123,
   "name": "christmas",
+  "limit": "3000",
   "expenses": [
     {
-      "date": "12.12.12",
-      "price": 12,
-      "category": "Home",
-      "comment": ""
+      "date": "2021-12-16",
+      "price": 67.55,
+      "category": "Food",
+      "comment": "pizza"
     },
     {
-      "date": "12.12.12",
-      "price": 12,
-      "category": "Home",
-      "comment": ""
+      "date": "2021-12-17",
+      "price": 513.99,
+      "category": "Other",
+      "comment": "headphones"
     },
     {
-      "date": "2015-12-21",
-      "price": 45.0,
-      "category": 123,
-      "comment": "gifts"
+      "date": "2021-12-24",
+      "price": 17.85,
+      "category": "Splurge",
+      "comment": "New socks"
     },
     {
-      "date": "2023-12-21",
-      "price": 12.45,
-      "category": "Transport",
-      "comment": "buss"
+      "date": "2021-12-26",
+      "price": 31.76,
+      "category": "Splurge",
+      "comment": "Books"
     }
   ]
 }
