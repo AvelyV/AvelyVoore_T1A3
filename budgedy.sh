@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# bundle install
+bundle install
 clear
 artii 'Budgedy'
 ruby budgedy.rb $1
