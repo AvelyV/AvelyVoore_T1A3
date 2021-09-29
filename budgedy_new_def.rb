@@ -138,6 +138,8 @@ def new_exp_menu(choose_file)
   end
 end
 
+
+
 # gets all the filenames w/out file extesions
 def choose_file
   period = []
