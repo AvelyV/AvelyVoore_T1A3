@@ -2,18 +2,6 @@ require 'json'
 require 'tty-prompt'
 require 'rainbow'
 
-def write_json(new_json, path)
-  File.write("./files/#{path}", JSON.pretty_generate(new_json))
-  # puts Rainbow(message).color(color)
-
-end
-
-def modify_category(categories)
-  puts Rainbow("Current categories: #{categories.join(', ')}").whitesmoke
-  yield
-  write_json(categories, "Categories/cat.json")
-  puts Rainbow("Available categories are: #{categories.join(', ')}").whitesmoke
-end
 
 # prints main menu
 def main_menu
@@ -21,10 +9,6 @@ def main_menu
   quit = false
 
   while quit == false
-
-    # puts "▒█▀▄▀█ ░█▀▀█ ▀█▀ ▒█▄░▒█　 ▒█▀▄▀█ ▒█▀▀▀ ▒█▄░▒█ ▒█░▒█ "
-    # puts "▒█▒█▒█ ▒█▄▄█ ▒█░ ▒█▒█▒█　 ▒█▒█▒█ ▒█▀▀▀ ▒█▒█▒█ ▒█░▒█ "
-    # puts "▒█░░▒█ ▒█░▒█ ▄█▄ ▒█░░▀█　 ▒█░░▒█ ▒█▄▄▄ ▒█░░▀█ ░▀▄▄▀"
     prompt = TTY::Prompt.new
 
     input = prompt.select("What would you like to do?",
@@ -36,12 +20,13 @@ def main_menu
       # takes user to new expence menu
       new_exp_menu(choose_file)
     when "Budget Period Overview"
+      # leave it as it's own method as you call ot with CLA
       # takes user to Budget overview menu
       begin
         system('clear')
         overview(choose_file)
-      rescue StandardError
-        puts Rainbow("There are no existing budget periods").salmon
+      # rescue StandardError
+      #   puts Rainbow("There are no existing budget periods").salmon
       end
     when "Modify Categories"
       back = false
@@ -81,8 +66,10 @@ def main_menu
 
       ex_to_del = prompt.select("Choose an expense to delete: ", choices, cycle: true)
       json["expenses"].delete_at(ex_to_del)
-
-      File.write("./files/periods/#{file}.json", JSON.pretty_generate(json))
+      
+      message = ""
+      write_json(json, "periods/#{file}", message)
+      # File.write("./files/periods/#{file}.json", JSON.pretty_generate(json))
     when "Change Limits"
       change_limit(choose_file)
     when "Exit"
@@ -91,8 +78,7 @@ def main_menu
   end
 end
 
-# DONE:
-def new_period
+def new_period_info
   prompt = TTY::Prompt.new
   b_name = prompt.ask("Give the new budget period a unique name: ") do |q|
     q.required true
@@ -114,6 +100,13 @@ def new_period
 
   # Storing instances in a hash
   period = { name: name.to_s, limit: limit.to_s, expenses: [] }
+  create_new_period(period)
+end
+
+# DONE:
+def create_new_period(period)
+  new_period_info
+
   JSON.generate(period)
 
   File.open("./files/periods/#{name.delete(' ')}.json", "w") do |f|
@@ -144,12 +137,12 @@ def new_exp_menu(choose_file)
     when "Existing Budget Period"
       begin
         per = prompt.select("Choose a period you would like to add to", choose_file, cycle: true)
-        new_expense(per, array)
+        new_expense(per, read_json("Categories/cat.json"))
         # rescue StandardError
         #   puts Rainbow("There are no existing budget periods...").salmon
       end
     when "Create New Budget Period"
-      new_period
+      new_period_info
     when "Back"
       back = true
     end
@@ -158,7 +151,7 @@ end
 
 # DONE:
 # adding new expence to a period
-def new_expense(per, array)
+def new_expense(per, all_categories)
   puts "Enter new expense details"
   prompt = TTY::Prompt.new
 
@@ -172,16 +165,18 @@ def new_expense(per, array)
     q.convert(:float, "Error, enter a numeric value")
   end
 
-  category = prompt.select("Category:", array, cycle: true)
+  category = prompt.select("Category:", all_categories, cycle: true)
 
   comment = prompt.ask("Comment: ")
 
-  json = JSON.parse(File.read("./files/periods/#{per}.json", symbolize_names: true))
+  json = read_json("periods/#{per}.json")
+  json["expenses"] << { "date" => date, "price" => price, "category" => category, "comment" => comment }
 
-  json["expenses"] << { date: date, price: price, category: category, comment: comment }
-  write_json(json, "periods/#{per}.json")
-  # File.write("./files/periods/#{per}.json", JSON.pretty_generate(json))
-  puts Rainbow("New expense added").lightblue
+  # json = JSON.parse(File.read("./files/periods/#{per}.json", symbolize_names: true))
+
+  # json["expenses"] << { date: date, price: price, category: category, comment: comment }
+  message = "New expense added"
+  write_json(json, "periods/#{per}", message)
 end
 
 def create_new_expense(expense, period)
@@ -192,45 +187,52 @@ def create_new_expense(expense, period)
   puts Rainbow("New expense added").lightblue
 end
 
-# DONE:
-# parse categories array
-def read_json(path)
-  return JSON.parse(File.read("./files/#{path}"))
-end
-
-
-
 def overview(choose_file)
-  system('clear')
-
   puts Rainbow("█▀▀█ ▀█░█▀ █▀▀ █▀▀█ ▀█░█▀ ░▀░ █▀▀ █░░░█ ").lightblue
   puts Rainbow("█░░█ ░█▄█░ █▀▀ █▄▄▀ ░█▄█░ ▀█▀ █▀▀ █▄█▄█ ").lightgreen
   puts Rainbow("▀▀▀▀ ░░▀░░ ▀▀▀ ▀░▀▀ ░░▀░░ ▀▀▀ ▀▀▀ ░▀░▀░ ").lightpink
+
   prompt = TTY::Prompt.new
   inputs = prompt.select("What period would you like to see?", choose_file, per_page: 10, cycle: true)
-  # prints out period introduction
   json = read_json("periods/#{inputs}.json")
+  # prints out period introduction
   puts Rainbow("Period \"#{json['name']}\" limit is $#{json['limit']}").lightblue
 
-  # print list of expenses
   expenses = json["expenses"]
+  # calculates the sum of expenses in the period
+  sum = calc_sum_of_exp(expenses)
+  puts Rainbow("Your total spendings are #{sum}").lightblue
+
+  limit = json['limit'].to_f.round(2)
+  # print out budget status
+  limit_status(limit, sum)
+  
+  # prints out all the expenses in the period
+  print_expenses(expenses)
+end
+
+def calc_sum_of_exp(expenses)
   array = []
   expenses.each do |num|
     array << num['price'].to_f
   end
   sum = array.inject(0, :+)
+  return sum
+end
 
-  puts Rainbow("Your total spendings are #{sum}").lightblue
+def limit_status(limit, sum)
+    # print out budget status
+    if sum <= limit
+      puts Rainbow("You are $#{limit - sum} under the budget").lightgreen
+    elsif sum > limit
+      puts Rainbow("You are $#{(sum - limit).round(2)} over the budget").lightpink
+    else
+      puts "Something is not right"
+    end
+end
 
-  # print out budget status
-  limit = json['limit'].to_f.round(2)
-  if sum <= limit
-    puts Rainbow("You are $#{limit - sum} under the budget").lightgreen
-  elsif sum > limit
-    puts Rainbow("You are $#{(sum - limit).round(2)} over the budget").lightpink
-  else
-    puts "Something is not right"
-  end
+# called in overview
+def print_expenses(expenses)
   puts "Expenses: "
   # FIXME: find a nicer way of printing expenses
   expenses.each_with_index do |hash, index|
@@ -252,6 +254,23 @@ def change_limit(choose_file)
 
   # setting the new limit
   json['limit'] = new_limit
-  File.write("./files/periods/#{per}.json", JSON.pretty_generate(json))
-  puts Rainbow("Limit changed to $#{new_limit}").lightblue
+  message = "Limit changed to $#{new_limit}"
+  write_json(json, "periods/#{per}", message)
+end
+
+def read_json(path)
+  return JSON.parse(File.read("./files/#{path}"))
+end
+
+
+def write_json(new_json, path, message)
+  File.write("./files/#{path}.json", JSON.pretty_generate(new_json))
+  puts Rainbow(message).lightblue
+end
+
+def modify_category(categories)
+  puts Rainbow("Current categories: #{categories.join(', ')}").whitesmoke
+  yield
+  message = "Available categories are: #{categories.join(', ')}"
+  write_json(categories, "Categories/cat", message)
 end

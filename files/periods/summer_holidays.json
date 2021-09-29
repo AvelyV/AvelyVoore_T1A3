@@ -13,6 +13,12 @@
       "price": 57.0,
       "category": "Food",
       "comment": "restaurant"
+    },
+    {
+      "date": "2022-12-01",
+      "price": 34.85,
+      "category": "Splurge",
+      "comment": "flippy-floppies"
     }
   ]
 }
