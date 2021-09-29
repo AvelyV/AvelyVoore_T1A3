@@ -1,16 +1,17 @@
 # About  
 Budgedy is a simple budgeting app that runs from the terminal.  
+It allows user to track their spending and be more financially aware. 
 
 
 # Installation
 
 # Using the App
 After you have followed installation steps, you can run the app in your terminal by typing **./budgedy.sh** and hitting enter.  
-Thay will take you to *main menu* of the app. From here you are able to access everything else. 
+That will open the application and take you to *main menu*. From here you are able to access everything else. 
 ![main menu](./files/img/mainmenu.png)  
 Main menu is navigated using arrows and pressing enter on the option you'd like to choose.  
 
-To create a new budget period choose the first option, ***New Entry***, from main menu, then choose the second option, ***Create New Budget Period***. After that you are asked to enter a name (like january 2021 or christmas party for example) and limit for the period. You can do that typing on your keyboard and hitting enter when done. After that, you are taken back to secondary menu, to get back to main menu, choose option *Back*.  
+To create a new budget period choose the first option, **New Entry**, from main menu, then choose the second option, **Create New Budget Period**. After that you are asked to enter a name (like january 2021 or christmas party for example) and limit for the period. You can do that typing on your keyboard and hitting enter when done. After that, you are taken back to secondary menu, to get back to main menu, choose option *Back*.  
 
 To record an expense, choose **New Entry** from main menu. Them, from secondary menu, choose **Existing Budget Period**. After that, you will see all your budget periods. Choose the one you would like to add an expense to. After that you are asked to input *date*, *price*, choose from *categories* and write a *comment* if you choose to. You should see a confirmation "New expense added" on the screen.  
 
@@ -25,7 +26,7 @@ To delete an entry, choose **Delete an Entry** from the main menu. Then, all the
 
 There is also an option the change the limits for existing budget periods. Choose the 5th option, *Change Limits* in main menu. Then, choose a period thats' limit you would like to change. Once you have done that, current limit is printed and  you are asked to enter the new limit. Confirmation "Limit changed..." will be printed on the screen. Takes you automatically back to main menu.   
 
-To exit the aplication, choose *Exit* from the mein menu. All changes are automatically saved.
+To exit the aplication, choose **Exit** from the mein menu. All changes are automatically saved.
 
 
 

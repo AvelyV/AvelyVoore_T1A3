@@ -26,7 +26,7 @@ def main_menu
         system('clear')
         overview(choose_file)
       rescue StandardError
-        puts Rainbow("There are no existing budget periods").salmon
+        puts Rainbow("There are no existing budget periods to display").salmon
       end
     when "Modify Categories"
       back = false
@@ -67,7 +67,10 @@ def main_menu
       write_json(json, "periods/#{file}", "Expense Removed")
       # File.write("./files/periods/#{file}.json", JSON.pretty_generate(json))
     when "Change Limits"
+      begin
       change_limit(choose_file)
+      rescue
+        puts "There are no existing budget periods. Add at least one to change the limit."
     when "Exit"
       quit = true
     end
