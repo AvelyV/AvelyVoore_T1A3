@@ -100,29 +100,16 @@ def new_period_info
 
   # Storing instances in a hash
   period = { name: name.to_s, limit: limit.to_s, expenses: [] }
-  create_new_period(period)
+  return period
 end
 
 # DONE:
 def create_new_period(period)
-  new_period_info
-
   JSON.generate(period)
 
-  File.open("./files/periods/#{name.delete(' ')}.json", "w") do |f|
+  File.open("./files/periods/#{period[:name].to_s}.json", "w") do |f|
     f.write(period.to_json)
   end
-end
-
-# DONE: prints all the  filenames w/out file extesions
-def choose_file
-  period = []
-  files =  Dir.children "./files/periods"
-  files.map! do |file|
-    file = file.split('.').first
-    period << file
-  end
-  return period
 end
 
 # DONE:
@@ -142,11 +129,22 @@ def new_exp_menu(choose_file)
         #   puts Rainbow("There are no existing budget periods...").salmon
       end
     when "Create New Budget Period"
-      new_period_info
+      create_new_period(new_period_info)
     when "Back"
       back = true
     end
   end
+end
+
+# DONE: prints all the  filenames w/out file extesions
+def choose_file
+  period = []
+  files =  Dir.children "./files/periods"
+  files.map! do |file|
+    file = file.split('.').first
+    period << file
+  end
+  return period
 end
 
 # DONE:
