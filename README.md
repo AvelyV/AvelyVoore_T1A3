@@ -22,7 +22,7 @@ If you choose the first option, all the current categories are printed and you a
 If you choose to Delete a category, you are asked to choose a category you would like to be deleted.  
 Once you have done that you are taken back to secondary menu. To get back to main menu, choose *Back*.  
 
-To delete an entry, choose **Delete an Entry** from the main menu. Then, all the existing budget periods are displayd. Choose the one you would like to delete an expense. Once you have done that, another list is printed with all the entered expenses in that budget period. Use up and down keys to choose the one you'd like to delete. When you hit enter, confirmation "Expense Removed" should be displayd. Takes you automatically back to main menu.
+To remove an entry, choose **Delete an Expense** from the main menu. Then, all the existing budget periods are displayd. Choose the one you would like to delete an expense. Once you have done that, another list is printed with all the entered expenses in that budget period. Use up and down keys to choose the one you'd like to delete. When you hit enter, confirmation "Expense Removed" should be displayd. Takes you automatically back to main menu.
 
 There is also an option the change the limits for existing budget periods. Choose the 5th option, *Change Limits* in main menu. Then, choose a period thats' limit you would like to change. Once you have done that, current limit is printed and  you are asked to enter the new limit. Confirmation "Limit changed..." will be printed on the screen. Takes you automatically back to main menu.   
 

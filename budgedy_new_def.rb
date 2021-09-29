@@ -13,7 +13,7 @@ def main_menu
     prompt = TTY::Prompt.new
 
     input = prompt.select("What would you like to do?",
-                          ["New Entry", "Budget Period Overview", "Modify Categories", "Delete an Entry",
+                          ["New Entry", "Budget Period Overview", "Modify Categories", "Delete an Expense",
                            "Change Limits", "Exit"], cycle: true)
 
     case input
@@ -50,7 +50,8 @@ def main_menu
           back = true
         end
       end
-    when "Delete an Entry"
+    when "Delete an Expense"
+      begin
       file = prompt.select("What period would you like to delete from?", choose_file, per_page: 10, cycle: true)
 
       json = read_json("periods/#{file}.json")
@@ -65,12 +66,15 @@ def main_menu
       json["expenses"].delete_at(ex_to_del)
 
       write_json(json, "periods/#{file}", "Expense Removed")
-      # File.write("./files/periods/#{file}.json", JSON.pretty_generate(json))
+    rescue StandardError
+      puts Rainbow("There are no existing expenses.").salmon
+    end
     when "Change Limits"
       begin
-      change_limit(choose_file)
-      rescue
-        puts "There are no existing budget periods. Add at least one to change the limit."
+        change_limit(choose_file)
+      rescue StandardError
+        puts Rainbow("There are no existing budget periods. Add at least one to change the limit.").salmon
+      end
     when "Exit"
       quit = true
     end
@@ -130,8 +134,8 @@ def new_exp_menu(choose_file)
       begin
         per = prompt.select("Choose a period you would like to add to", choose_file, cycle: true)
         new_expense(per, read_json("Categories/cat.json"))
-        rescue StandardError
-          puts Rainbow("There are no existing budget periods...").salmon
+      rescue StandardError
+        puts Rainbow("There are no existing budget periods to add an expense to. Create a new budget period first.").salmon
       end
     when "Create New Budget Period"
       create_new_period(new_period_info)
