@@ -4,12 +4,6 @@
   "expenses": [
     {
       "date": "2011-11-11",
-      "price": 0.3,
-      "category": "Food",
-      "comment": null
-    },
-    {
-      "date": "2011-11-11",
       "price": 12.7,
       "category": "Home",
       "comment": null

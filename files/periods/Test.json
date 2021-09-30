@@ -11,14 +11,14 @@
     {
       "date": "2011-11-11",
       "price": 12.0,
-      "category": "Home",
-      "comment": "2fb"
+      "category": "Entertainment",
+      "comment": "movies"
     },
     {
       "date": "2011-11-11",
-      "price": -34.0,
-      "category": "Home",
-      "comment": "dfv"
+      "price": 34.0,
+      "category": "Food",
+      "comment": "bananas"
     }
   ]
 }

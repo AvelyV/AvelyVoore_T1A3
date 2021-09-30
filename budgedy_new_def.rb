@@ -148,7 +148,6 @@ def new_exp_menu(choose_file)
   end
 end
 
-
 # gets all the filenames w/out file extesions
 def choose_file
   period = []
@@ -187,19 +186,9 @@ def new_expense(period, all_categories)
   write_json(json, "periods/#{period}", "New expense added")
 end
 
-# write new expense into json
-def create_new_expense(expense, period)
-  json = JSON.parse(File.read("./files/periods/#{period}.json", symbolize_names: true))
-
-  json["expenses"] << expense
-  File.write("./files/periods/#{per}.json", JSON.pretty_generate(json))
-  puts Rainbow("New expense added").lightblue
-end
-
 # overview of chosen period
 def overview(choose_file)
-  font = TTY::Font.new(:doom)
-  puts font.write("Overview")
+  print_fancy('Overview')
 
   prompt = TTY::Prompt.new
   inputs = prompt.select("What period would you like to see?", choose_file, per_page: 10, cycle: true)
@@ -219,6 +208,12 @@ def overview(choose_file)
   expenses(sum, expenses)
 end
 
+def print_fancy(text)
+  font = TTY::Font.new(:doom)
+  puts font.write(text)
+end
+
+# Checks if there are any expenses
 def expenses(sum, expenses)
   if sum == 0
     puts Rainbow("There are no expenses in this period").salmon
