@@ -1,12 +1,14 @@
 # About  
 Budgedy is a simple budgeting app that runs from the terminal.  
-It allows user to track their spending and be more financially aware. 
+It allows you to track your spending and be more financially aware. 
 
 
-# Installation
+# Installation  
+If you are not sure how to access terminal on your computer, check out this [article](https://towardsdatascience.com/a-quick-guide-to-using-command-line-terminal-96815b97b955) and read the "opening command line".  
+
 
 # Using the App
-After you have followed installation steps, you can run the app in your terminal by typing **./budgedy.sh** and hitting enter.  
+After you have followed the installation steps, you can run the app in your terminal by typing **./budgedy.sh** and hitting enter. 
 That will open the application and take you to *main menu*. From here you are able to access everything else. 
 ![main menu](./files/img/mainmenu.png)  
 Main menu is navigated using arrows and pressing enter on the option you'd like to choose.  
@@ -35,7 +37,7 @@ To exit the aplication, choose **Exit** from the mein menu. All changes are auto
 
 
 # Dependancies  
-Budgedy is written in Ruby programming language and in order to use it Ruby needs to be installed on your computer. You can find instructions to do so in [Ruby documentation](https://www.ruby-lang.org/en/downloads/). 
+Budgedy is written in Ruby programming language and in order to use it, Ruby needs to be installed on your computer. You can find instructions to do so in [Ruby documentation](https://www.ruby-lang.org/en/downloads/). 
 
 App uses following Ruby gems to run : 
 
@@ -51,3 +53,4 @@ These are automatically downloaded when you run the app in the terminal using *.
 
 
 # System and Hardware requirements
+Budgedy runs on all operating systems. 

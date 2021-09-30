@@ -1,8 +1,8 @@
 # import gems
 require 'json'
 require 'tty-prompt'
+require 'tty-font'
 require 'rainbow'
-
 
 # prints main menu
 def main_menu
@@ -66,9 +66,9 @@ def main_menu
       json["expenses"].delete_at(ex_to_del)
 
       write_json(json, "periods/#{file}", "Expense Removed")
-    rescue StandardError
-      puts Rainbow("There are no existing expenses.").salmon
-    end
+      rescue StandardError
+        puts Rainbow("There are no existing expenses.").salmon
+      end
     when "Change Limits"
       begin
         change_limit(choose_file)
@@ -81,10 +81,11 @@ def main_menu
   end
 end
 
-# take 
+# take user input for new period
 def new_period_info
   prompt = TTY::Prompt.new
   b_name = prompt.ask("Give the new budget period a unique name: ") do |q|
+    q.validate(/[:word]/, "Invalid period name: \"%{value}\", special characters not allowed.")
     q.required true
     q.modify :trim
   end
@@ -94,11 +95,11 @@ def new_period_info
 
   limit = prompt.ask("What is the limit for \"#{name}\" period? $") do |q|
     q.required true
-    # convert to float, print an error f entered value was not numeric
+    # convert to float, print an error in case entered value was not numeric
     q.convert(:float, "Error, enter numeric value")
   end
 
-  # Storing instances in a hash
+  # Storing new period in a hash
   period = { name: name.to_s, limit: limit.to_s, expenses: [] }
   return period
 end
@@ -106,14 +107,14 @@ end
 # writes the new period into json file
 def create_new_period(period)
   JSON.generate(period)
-  File.open("./files/periods/#{period[:name].to_s}.json", "w") do |f|
+  File.open("./files/periods/#{period[:name]}.json", "w") do |f|
     f.write(period.to_json)
   end
 end
 
 # create an array with file names without file extensions
 def file_names(b_name)
-  array = b_name.split('')
+  array = b_name.chars
   array.map! do |letter|
     letter = '_' if letter == ' '
     letter
@@ -144,7 +145,6 @@ def new_exp_menu(choose_file)
     end
   end
 end
-
 
 
 # gets all the filenames w/out file extesions
@@ -180,9 +180,6 @@ def new_expense(per, all_categories)
   json = read_json("periods/#{per}.json")
   json["expenses"] << { "date" => date, "price" => price, "category" => category, "comment" => comment }
 
-  # json = JSON.parse(File.read("./files/periods/#{per}.json", symbolize_names: true))
-
-  # json["expenses"] << { date: date, price: price, category: category, comment: comment }
   write_json(json, "periods/#{per}", "New expense added")
 end
 
@@ -197,9 +194,8 @@ end
 
 # overview of chosen period
 def overview(choose_file)
-  puts Rainbow("█▀▀█ ▀█░█▀ █▀▀ █▀▀█ ▀█░█▀ ░▀░ █▀▀ █░░░█ ").lightblue
-  puts Rainbow("█░░█ ░█▄█░ █▀▀ █▄▄▀ ░█▄█░ ▀█▀ █▀▀ █▄█▄█ ").lightgreen
-  puts Rainbow("▀▀▀▀ ░░▀░░ ▀▀▀ ▀░▀▀ ░░▀░░ ▀▀▀ ▀▀▀ ░▀░▀░ ").lightpink
+  font = TTY::Font.new(:doom)
+  puts font.write("Overview", letter_spacing: 1)
 
   prompt = TTY::Prompt.new
   inputs = prompt.select("What period would you like to see?", choose_file, per_page: 10, cycle: true)
@@ -210,14 +206,22 @@ def overview(choose_file)
   expenses = json["expenses"]
   # calculates the sum of expenses in the period
   sum = calc_sum_of_exp(expenses)
-  puts Rainbow("Your total spendings are #{sum}").lightblue
+  puts Rainbow("Your total spendings are $#{sum}").lightblue
 
   limit = json['limit'].to_f.round(2)
   # print out budget status
-  puts limit_status(limit, sum)
+  limit_status(limit, sum)
 
+  expenses(sum, expenses)
+end
+
+def expenses(sum, expenses)
+  if sum == 0
+    puts Rainbow("There are no expenses in this period").salmon
+  else
   # prints out all the expenses in the period
-  print_expenses(expenses)
+    print_expenses(expenses)
+  end
 end
 
 # add all the prices in the period
@@ -244,7 +248,7 @@ end
 # called in overview
 def print_expenses(expenses)
   puts "Expenses: "
-  # FIXME: find a nicer way of printing expenses
+  # Print all the expenses in chosen period
   expenses.each_with_index do |hash, index|
     puts Rainbow("#{index + 1}. On #{hash['date']} you spent $#{hash['price']}, Category: #{hash['category']}, Comment: #{hash['comment']}").whitesmoke
   end

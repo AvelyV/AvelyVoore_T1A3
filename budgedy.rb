@@ -11,7 +11,6 @@ else
       choose_file
       new_exp_menu(choose_file)
       main_menu
-      new_exp_menu
     elsif argv == '-o' || argv == '--overview'
       # go straight into overview menu
       choose_file

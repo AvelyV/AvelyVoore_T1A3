@@ -13,3 +13,5 @@ gem "tty-prompt", "~> 0.23.1"
 gem "rainbow", "~> 3.0"
 
 gem "rspec", "~> 3.10"
+
+gem "tty-font", "~> 0.5.0"
