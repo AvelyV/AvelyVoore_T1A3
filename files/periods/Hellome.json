@@ -1,1 +1,24 @@
-{"name":"Hellome","limit":"4654.0","expenses":[]}
+{
+  "name": "Hellome",
+  "limit": "4654.0",
+  "expenses": [
+    {
+      "date": "2011-11-11",
+      "price": 0.3,
+      "category": "Food",
+      "comment": null
+    },
+    {
+      "date": "2011-11-11",
+      "price": 12.7,
+      "category": "Home",
+      "comment": null
+    },
+    {
+      "date": "2011-11-11",
+      "price": 0.0,
+      "category": "Home",
+      "comment": null
+    }
+  ]
+}

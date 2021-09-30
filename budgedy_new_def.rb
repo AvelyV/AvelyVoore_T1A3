@@ -52,20 +52,20 @@ def main_menu
       end
     when "Delete an Expense"
       begin
-      file = prompt.select("What period would you like to delete from?", choose_file, per_page: 10, cycle: true)
+        file = prompt.select("What period would you like to delete from?", choose_file, per_page: 10, cycle: true)
 
-      json = read_json("periods/#{file}.json")
-      choices = json["expenses"].each_with_index.map do |expense, index|
-        {
-          name: "#{expense['date']}, $#{expense['price']} on #{expense['category']}; Comment: #{expense['comment']}",
-          value: index
-        }
-      end
+        json = read_json("periods/#{file}.json")
+        choices = json["expenses"].each_with_index.map do |expense, index|
+          {
+            name: "#{expense['date']}, $#{expense['price']} on #{expense['category']}; Comment: #{expense['comment']}",
+            value: index
+          }
+        end
 
-      ex_to_del = prompt.select("Choose an expense to delete: ", choices, cycle: true)
-      json["expenses"].delete_at(ex_to_del)
+        ex_to_del = prompt.select("Choose an expense to delete: ", choices, cycle: true)
+        json["expenses"].delete_at(ex_to_del)
 
-      write_json(json, "periods/#{file}", "Expense Removed")
+        write_json(json, "periods/#{file}", "Expense Removed")
       rescue StandardError
         puts Rainbow("There are no existing expenses.").salmon
       end
@@ -97,6 +97,8 @@ def new_period_info
     q.required true
     # convert to float, print an error in case entered value was not numeric
     q.convert(:float, "Error, enter numeric value")
+    # checks if entered value is a positive number
+    q.validate(/^[+]?([.]\d+|\d+[.]?\d*)$/, "Invalid period name: \"%{value}\", enter positive number.")
   end
 
   # Storing new period in a hash
@@ -171,6 +173,8 @@ def new_expense(per, all_categories)
   price = prompt.ask("Price: $") do |q|
     q.required true
     q.convert(:float, "Error, enter a numeric value")
+    # checks if entered value is a positive number
+    q.validate(/^[+]?([.]\d+|\d+[.]?\d*)$/, "Invalid period name: \"%{value}\", enter positive number.")
   end
 
   category = prompt.select("Category:", all_categories, cycle: true)
@@ -219,7 +223,7 @@ def expenses(sum, expenses)
   if sum == 0
     puts Rainbow("There are no expenses in this period").salmon
   else
-  # prints out all the expenses in the period
+    # prints out all the expenses in the period
     print_expenses(expenses)
   end
 end
@@ -245,7 +249,7 @@ def limit_status(limit, sum)
   end
 end
 
-# called in overview
+# called in overview method
 def print_expenses(expenses)
   puts "Expenses: "
   # Print all the expenses in chosen period
