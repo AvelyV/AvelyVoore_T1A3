@@ -4,7 +4,11 @@ It allows you to track your spending and be more financially aware.
 
 
 # Installation  
-If you are not sure how to access terminal on your computer, check out this [article](https://towardsdatascience.com/a-quick-guide-to-using-command-line-terminal-96815b97b955) and read the "opening command line".  
+Budgedy can be installed by clicking on the "Code" button at the top of this page. Clone this repository or download it and then unzip. 
+In the terminal, first, run ```gem install bundler```. If you already have bundler installed, you can skip this step.   
+Then, you are ready to use the application. To do so, run ```./budgedy.sh``` from the terminal.  
+If you are not sure how to access terminal on your computer, check out this [article](https://towardsdatascience.com/a-quick-guide-to-using-command-line-terminal-96815b97b955) and read the "opening command line" bit.  
+
 
 
 # Using the App
@@ -30,12 +34,6 @@ There is also an option the change the limits for existing budget periods. Choos
 
 To exit the aplication, choose **Exit** from the mein menu. All changes are automatically saved.
 
-
-
-
-
-
-
 # Dependancies  
 Budgedy is written in Ruby programming language and in order to use it, Ruby needs to be installed on your computer. You can find instructions to do so in [Ruby documentation](https://www.ruby-lang.org/en/downloads/). 
 
@@ -48,6 +46,9 @@ gem "tty-prompt", "~> 0.23.1"
 gem "rainbow", "~> 3.0"
 
 gem "rspec", "~> 3.10"
+
+gem "tty-font", "~> 0.5.0"
+
 
 These are automatically downloaded when you run the app in the terminal using *./budgedy.sh*
 

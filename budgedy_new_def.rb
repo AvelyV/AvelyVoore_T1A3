@@ -98,7 +98,7 @@ def new_period_info
     # convert to float, print an error in case entered value was not numeric
     q.convert(:float, "Error, enter numeric value")
     # checks if entered value is a positive number
-    q.validate(/^[+]?([.]\d+|\d+[.]?\d*)$/, "Invalid period name: \"%{value}\", enter positive number.")
+    q.validate(/^[+]?([.]\d+|\d+[.]?\d*)$/, "Invalid input, enter positive number.")
   end
 
   # Storing new period in a hash
@@ -161,7 +161,7 @@ def choose_file
 end
 
 # adds new expence to a period
-def new_expense(per, all_categories)
+def new_expense(period, all_categories)
   puts "Enter new expense details"
   prompt = TTY::Prompt.new
 
@@ -181,10 +181,10 @@ def new_expense(per, all_categories)
 
   comment = prompt.ask("Comment: ")
 
-  json = read_json("periods/#{per}.json")
+  json = read_json("periods/#{period}.json")
   json["expenses"] << { "date" => date, "price" => price, "category" => category, "comment" => comment }
 
-  write_json(json, "periods/#{per}", "New expense added")
+  write_json(json, "periods/#{period}", "New expense added")
 end
 
 # write new expense into json
@@ -199,7 +199,7 @@ end
 # overview of chosen period
 def overview(choose_file)
   font = TTY::Font.new(:doom)
-  puts font.write("Overview", letter_spacing: 1)
+  puts font.write("Overview")
 
   prompt = TTY::Prompt.new
   inputs = prompt.select("What period would you like to see?", choose_file, per_page: 10, cycle: true)
@@ -215,7 +215,7 @@ def overview(choose_file)
   limit = json['limit'].to_f.round(2)
   # print out budget status
   limit_status(limit, sum)
-
+  # prints all the expenses
   expenses(sum, expenses)
 end
 
@@ -265,7 +265,10 @@ def change_limit(choose_file)
   # accessing the right file
   json = read_json("periods/#{per}.json")
   puts Rainbow("Current limit is $#{json['limit']}").whitesmoke
-  new_limit = prompt.ask("Enter new limit: $")
+  new_limit = prompt.ask("Enter new limit: $") do |q|
+    q.convert(:float, "Error, enter numeric value")
+    q.validate(/^[+]?([.]\d+|\d+[.]?\d*)$/, "Invalid input, enter positive number.")
+  end
   # setting the new limit
   json['limit'] = new_limit
   write_json(json, "periods/#{per}", "Limit changed to $#{new_limit}")
