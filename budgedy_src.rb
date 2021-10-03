@@ -293,5 +293,3 @@ def modify_category(categories)
     puts "There are no categories to delete"
   end
 end
-
-main_menu
