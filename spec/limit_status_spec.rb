@@ -4,11 +4,11 @@ require_relative '../budgedy_new_def'
 # will print out the correct output tho
 
 describe 'limit status' do
-  it "giver the right limit status" do
+  it "giver the right limit status, 50 under" do
     # output in green '50'
     expect(limit_status(100, 50)).to be(nil)
   end
-  it "gives the right limit status" do
+  it "gives the right limit status, 10 over" do
     # output in pink '10'
     expect(limit_status(50, 60)).to be(nil)
   end

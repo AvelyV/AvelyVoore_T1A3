@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# gem install bundler
+gem install bundler
 bundle install
 clear
 artii 'Budgedy'

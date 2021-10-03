@@ -7,15 +7,15 @@ require 'rainbow'
 # prints main menu
 def main_menu
   categories = read_json("Categories/cat.json")
+  
   quit = false
 
   while quit == false
     prompt = TTY::Prompt.new
-
+    puts Rainbow(" ###### MAIN MENU ######").darkolivegreen
     input = prompt.select("What would you like to do?",
                           ["New Entry", "Budget Period Overview", "Modify Categories", "Delete an Expense",
                            "Change Limits", "Exit"], cycle: true)
-
     case input
     when "New Entry"
       # takes user to new expence menu
@@ -62,6 +62,8 @@ def main_menu
           }
         end
 
+        p choices
+
         ex_to_del = prompt.select("Choose an expense to delete: ", choices, cycle: true)
         json["expenses"].delete_at(ex_to_del)
 
@@ -76,6 +78,7 @@ def main_menu
         puts Rainbow("There are no existing budget periods. Add at least one to change the limit.").salmon
       end
     when "Exit"
+      print_fancy('Goodby')
       quit = true
     end
   end
@@ -173,7 +176,7 @@ def new_expense(period, all_categories)
     q.required true
     q.convert(:float, "Error, enter a numeric value")
     # checks if entered value is a positive number
-    q.validate(/^[+]?([.]\d+|\d+[.]?\d*)$/, "Invalid period name: \"%{value}\", enter positive number.")
+    q.validate(/^[+]?([.]\d+|\d+[.]?\d*)$/, "Invalid price value: \"%{value}\", enter positive number.")
   end
 
   category = prompt.select("Category:", all_categories, cycle: true)
@@ -188,8 +191,9 @@ end
 
 # overview of chosen period
 def overview(choose_file)
-  print_fancy('Overview')
 
+  puts "█▀█ █░█ █▀▀ █▀█ █░█ █ █▀▀ █░█░█"
+  puts "█▄█ ▀▄▀ ██▄ █▀▄ ▀▄▀ █ ██▄ ▀▄▀▄▀"
   prompt = TTY::Prompt.new
   inputs = prompt.select("What period would you like to see?", choose_file, per_page: 10, cycle: true)
   json = read_json("periods/#{inputs}.json")
@@ -229,8 +233,7 @@ def calc_sum_of_exp(expenses)
   expenses.each do |num|
     prices << num['price'].to_f
   end
-  sum = prices.inject(0, :+)
-  return sum
+  return prices.inject(0, :+)
 end
 
 def limit_status(limit, sum)
@@ -280,8 +283,12 @@ end
 
 # adds or removes from categories
 def modify_category(categories)
-  puts Rainbow("Current categories: #{categories.join(', ')}").whitesmoke
-  yield
+  begin
+    puts Rainbow("Current categories: #{categories.join(', ')}").whitesmoke
+    yield
 
-  write_json(categories, "Categories/cat", "Available categories are: #{categories.join(', ')}")
+    write_json(categories, "Categories/cat", "Available categories are: #{categories.join(', ')}")
+  rescue StandardError
+    puts "There are no categories to delete"
+  end
 end

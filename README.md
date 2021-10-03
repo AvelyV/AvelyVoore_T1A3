@@ -12,7 +12,11 @@ If you are not sure how to access terminal on your computer, check out this [art
 
 
 # Using the App
-After you have followed the installation steps, you can run the app in your terminal by typing **./budgedy.sh** and hitting enter. 
+There are 3 ways to start the game: 
+- Running ```./budgedy.sh``` will start the application from the main menu. 
+- Running ```./budgedy.sh -o``` or ```./budgedy.sh --overview``` will start the app in overview feature
+- Running ```./budgedy.sh -e``` or ```./budgedy.sh --expense``` will start the app in "Add an Expense" feature. 
+After you have followed the installation steps, you can run the app in your terminal by typing **./budgedy.sh** and hitting enter.  
 That will open the application and take you to *main menu*. From here you are able to access everything else. 
 ![main menu](./files/img/mainmenu.png)  
 Main menu is navigated using arrows and pressing enter on the option you'd like to choose.  

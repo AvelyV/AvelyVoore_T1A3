@@ -1,24 +1,24 @@
 {
-  "name": "Test",
-  "limit": "1000.0",
+  "name": "test",
+  "limit": "1650.0",
   "expenses": [
     {
-      "date": "2011-01-01",
-      "price": 10.11,
+      "date": "2021-11-01",
+      "price": 18.2,
+      "category": "Other",
+      "comment": "post office"
+    },
+    {
+      "date": "2015-11-11",
+      "price": 438.0,
       "category": "Home",
-      "comment": "plant"
+      "comment": "rent"
     },
     {
       "date": "2011-11-11",
-      "price": 12.0,
-      "category": "Entertainment",
-      "comment": "movies"
-    },
-    {
-      "date": "2011-11-11",
-      "price": 34.0,
-      "category": "Food",
-      "comment": "bananas"
+      "price": 6.0,
+      "category": "Other",
+      "comment": "flowers"
     }
   ]
 }

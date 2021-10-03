@@ -1,5 +1,5 @@
 # Import supporting files
-require_relative 'budgedy_new_def'
+require_relative 'budgedy_src'
 
 # If no command line arguments are passed, run main_menu
 if !ARGV.any?
