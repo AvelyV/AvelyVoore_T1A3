@@ -24,24 +24,7 @@ def main_menu
       # takes user to Budget overview menu
       begin
         system('clear')
-        overview_welcome
-        file = choose_period("What period would you like to see?", choose_file)
-        json = read_json("periods/#{file}.json")
-
-        puts Rainbow("Period \"#{json['name']}\" limit is $#{json['limit']}").lightblue
-    
-        expenses = json["expenses"]
-
-        # calculates the sum of expenses in the period
-        sum = calc_sum_of_exp(expenses)
-        puts Rainbow("Your total spendings are $#{sum}").lightblue
-    
-        limit = json['limit'].to_f.round(2)
-
-        # print out budget status
-        limit_status(limit, sum)
-        # prints all the expenses
-        expenses(sum, expenses)
+        overview
       rescue StandardError
         puts Rainbow("There are no existing budget periods to display").salmon
       end
@@ -97,6 +80,27 @@ def main_menu
       quit = true
     end
   end
+end
+
+def overview
+  overview_welcome
+  file = choose_period("What period would you like to see?", choose_file)
+  json = read_json("periods/#{file}.json")
+
+  puts Rainbow("Period \"#{json['name']}\" limit is $#{json['limit']}").lightblue
+
+  expenses = json["expenses"]
+
+  # calculates the sum of expenses in the period
+  sum = calc_sum_of_exp(expenses)
+  puts Rainbow("Your total spendings are $#{sum}").lightblue
+
+  limit = json['limit'].to_f.round(2)
+
+  # print out budget status
+  limit_status(limit, sum)
+  # prints all the expenses
+  expenses(sum, expenses)
 end
 
 def overview_welcome

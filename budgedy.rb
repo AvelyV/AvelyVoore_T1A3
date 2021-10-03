@@ -12,7 +12,8 @@ else
       main_menu
     elsif argv == '-o' || argv == '--overview'
       # go straight into overview menu
-      overview_welcome
+      overview
+      main_menu
     end
   end
 end
